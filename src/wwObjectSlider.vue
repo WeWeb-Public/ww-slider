@@ -33,7 +33,7 @@ wwLib.wwPopups.addPopup('wwSliderPopupStyle', wwSliderPopupStyle);
 /* wwManager:end */
 
 export default {
-    name: "ww-slider",
+    name: "__COMPONENT_NAME__",
     props: {
         wwObjectCtrl: Object,
         wwAttrs: {
