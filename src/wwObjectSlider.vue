@@ -179,8 +179,8 @@ export default {
 
             wwLib.wwPopups.addStory('WWSLIDER_EDIT', {
                 title: {
-                    en_GB: 'Edit slider',
-                    fr_FR: 'Editer le slider'
+                    en: 'Edit slider',
+                    fr: 'Editer le slider'
                 },
                 type: 'wwPopupList',
                 buttons: null,
@@ -188,16 +188,16 @@ export default {
                     list: {
                         EDIT_STYLE: {
                             separator: {
-                                en_GB: 'Style',
-                                fr_FR: 'Style'
+                                en: 'Style',
+                                fr: 'Style'
                             },
                             title: {
-                                en_GB: 'Change slider style',
-                                fr_FR: 'Changer l\'apparence du slider'
+                                en: 'Change slider style',
+                                fr: 'Changer l\'apparence du slider'
                             },
                             desc: {
-                                en_GB: 'Borders, shadow, ...',
-                                fr_FR: 'Bordures, ombres, ...'
+                                en: 'Borders, shadow, ...',
+                                fr: 'Bordures, ombres, ...'
                             },
                             icon: 'wwi wwi-edit-style',
                             shortcut: 's',
@@ -205,12 +205,12 @@ export default {
                         },
                         EDIT_RATIO: {
                             title: {
-                                en_GB: 'Change slider ratio',
-                                fr_FR: 'Changer le ratio du slider'
+                                en: 'Change slider ratio',
+                                fr: 'Changer le ratio du slider'
                             },
                             desc: {
-                                en_GB: 'Portrait, square, landscape, ...',
-                                fr_FR: 'Portrait, carré, paysage, ...'
+                                en: 'Portrait, square, landscape, ...',
+                                fr: 'Portrait, carré, paysage, ...'
                             },
                             icon: 'wwi wwi-ratio',
                             shortcut: 'r',
@@ -218,16 +218,16 @@ export default {
                         },
                         EDIT_ANIM: {
                             separator: {
-                                en_GB: 'Interaction',
-                                fr_FR: 'Interaction'
+                                en: 'Interaction',
+                                fr: 'Interaction'
                             },
                             title: {
-                                en_GB: 'Animation',
-                                fr_FR: 'Animation'
+                                en: 'Animation',
+                                fr: 'Animation'
                             },
                             desc: {
-                                en_GB: 'Change animation',
-                                fr_FR: 'Choisir l\'animation à l\'apparition de l\'image'
+                                en: 'Change animation',
+                                fr: 'Choisir l\'animation à l\'apparition de l\'image'
                             },
                             icon: 'wwi wwi-anim',
                             shortcut: 'a',
@@ -235,12 +235,12 @@ export default {
                         },
                         EDIT_HIDE: {
                             separator: {
-                                en_GB: 'More',
-                                fr_FR: 'Plus'
+                                en: 'More',
+                                fr: 'Plus'
                             },
                             title: {
-                                en_GB: 'Show / Hide',
-                                fr_FR: 'Montrer / Cacher'
+                                en: 'Show / Hide',
+                                fr: 'Montrer / Cacher'
                             },
                             icon: 'wwi wwi-hidden',
                             shortcut: 'h',
@@ -251,8 +251,8 @@ export default {
                         },
                         EDIT_CHANGE: {
                             title: {
-                                en_GB: 'Change object type',
-                                fr_FR: 'Changer le type d\'objet'
+                                en: 'Change object type',
+                                fr: 'Changer le type d\'objet'
                             },
                             icon: 'wwi wwi-switch',
                             shortcut: 't',
@@ -263,15 +263,15 @@ export default {
             })
             wwLib.wwPopups.addStory('WWSLIDER_RATIO', {
                 title: {
-                    en_GB: 'Slider Ratio',
-                    fr_FR: 'Ratio du slider'
+                    en: 'Slider Ratio',
+                    fr: 'Ratio du slider'
                 },
                 type: 'wwPopupImageRatio',
                 buttons: {
                     NEXT: {
                         text: {
-                            en_GB: 'Next',
-                            fr_FR: 'Suivant'
+                            en: 'Next',
+                            fr: 'Suivant'
                         },
                         next: 'WWSTYLE_STYLE'
                     }
@@ -279,15 +279,15 @@ export default {
             })
             wwLib.wwPopups.addStory('WWSTYLE_STYLE', {
                 title: {
-                    en_GB: 'Image style',
-                    fr_FR: 'Style de l\'image'
+                    en: 'Image style',
+                    fr: 'Style de l\'image'
                 },
                 type: 'wwPopupImageStyle',
                 buttons: {
                     OK: {
                         text: {
-                            en_GB: 'Ok',
-                            fr_FR: 'Valider'
+                            en: 'Ok',
+                            fr: 'Valider'
                         },
                         next: false
                     }
