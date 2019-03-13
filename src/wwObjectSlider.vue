@@ -14,7 +14,7 @@
             <!-- wwManager:end -->
             <div class="slide" v-for="(img, index) in imgs" :key="img.uniqueId" :style="getSlidePosition(index)">
                 <div class="slide-content" :style="getImagePosition(index)">
-                    <wwObject class="image" :ww-object="img" :ww-fixed-ratio="ratio" ww-inside-ww-object="true" ww-default-object-type="ww-image" ww-object-types-allowed="['ww-image']" :ww-no-section="wwAttrs.wwNoSection" :ww-no-link="wwAttrs.wwNoLink" @ww-add-before="addSlide(index, 0)" @ww-add-after="addSlide(index, 1)" @ww-remove="removeSlide(index)"></wwObject>
+                    <wwObject class="image" :ww-object="img" :ww-fixed-ratio="ratio" ww-inside-ww-object="ww-slider" ww-default-object-type="ww-image" ww-object-types-allowed="['ww-image']" :ww-no-section="wwAttrs.wwNoSection" :ww-no-link="wwAttrs.wwNoLink" @ww-add-before="addSlide(index, 0)" @ww-add-after="addSlide(index, 1)" @ww-remove="removeSlide(index)"></wwObject>
                 </div>
             </div>
             <div class="controls-bottom">
@@ -119,6 +119,20 @@ export default {
         init() {
             this.startInterval();
         },
+        initData() {
+            if (!this.wwObject.content.data.imgs || !this.wwObject.content.data.imgs.length) {
+                this.wwObject.content.data.imgs = [];
+
+                let imgs = [];
+                const count = 4;
+                for (let i = 0; i < count; i++) {
+                    imgs.push(wwLib.wwObject.getDefault({ type: 'ww-image' }));
+                }
+
+                this.wwObject.content.data.imgs = imgs;
+                this.wwObjectCtrl.update(this.wwObject);
+            }
+        },
         startInterval() {
             let self = this;
             clearInterval(this.slideInterval);
@@ -168,6 +182,9 @@ export default {
         },
         removeSlide(index) {
             this.wwObject.content.data.imgs.splice(index, 1);
+            if (!this.wwObject.content.data.imgs.length) {
+                this.wwObject.content.data.imgs.push(wwLib.wwObject.getDefault({ type: 'ww-image' }));
+            }
             this.wwObjectCtrl.update(this.wwObject);
         },
 
@@ -336,6 +353,10 @@ export default {
             }
 
             wwLib.wwObjectHover.removeLock();
+        },
+
+        beforeSave() {
+            console.log(this.wwObject);
         }
         /* wwManager:end */
     },
@@ -345,14 +366,7 @@ export default {
         this.$emit('ww-loaded', this);
     },
     created() {
-        let imgs = [];
-        const count = 4;
-        for (let i = 0; i < count; i++) {
-            imgs.push(wwLib.wwObject.getDefault({ type: 'ww-image' }));
-        }
-
-        this.wwObject.content.data.imgs = imgs;
-        this.wwObjectCtrl.update(this.wwObject);
+        this.initData();
     },
     beforeDestroy() {
         clearInterval(this.slideInterval);
