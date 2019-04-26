@@ -10,7 +10,7 @@ const addComponent = function () {
             content: {
                 type: name,
                 data: {
-                    imgs: [
+                    slides: [
                     ],
                     duration: 3000,
                     offset: 50,

@@ -329,6 +329,7 @@ export default {
     },
     methods: {
         init() {
+            console.log('THIS : ', this)
 
         },
         setResult() {
