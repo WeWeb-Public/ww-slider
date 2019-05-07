@@ -8,18 +8,23 @@
         <div class="borders" :style="borderStyle"></div>
         <div class="content" :style="contentStyle">
             <!-- wwManager:start -->
-            <div class="plus" v-if="!imgs || !imgs.length" @click="addSlide(0, 0)">
+            <div class="plus" v-if="!slides || !slides.length" @click="addSlide(0, 0)">
                 <span class="wwi wwi-add"></span>
             </div>
             <!-- wwManager:end -->
-            <div class="slide" v-for="(img, index) in imgs" :key="img.uniqueId" :style="getSlidePosition(index)">
+            <div class="slide" v-for="(slide, index) in slides" :key="slide.uniqueId" :style="getSlidePosition(index)">
                 <div class="slide-content" :style="getImagePosition(index)">
-                    <wwObject class="image" :ww-object="img" :ww-fixed-ratio="ratio" ww-inside-ww-object="ww-slider" ww-default-object-type="ww-image" ww-object-types-allowed="['ww-image']" :ww-no-section="wwAttrs.wwNoSection" :ww-no-link="wwAttrs.wwNoLink" @ww-add-before="addSlide(index, 0)" @ww-add-after="addSlide(index, 1)" @ww-remove="removeSlide(index)"></wwObject>
+                    <wwObject class="image" :ww-object="slide.img" :ww-fixed-ratio="ratio" ww-inside-ww-object="ww-slider" ww-default-object-type="ww-image" ww-object-types-allowed="['ww-image']" :ww-no-section="wwAttrs.wwNoSection" :ww-no-link="wwAttrs.wwNoLink" @ww-add-before="addSlide(index, 0)" @ww-add-after="addSlide(index, 1)" @ww-remove="removeSlide(index)"></wwObject>
+                    <span class="inner-content-container" :style="{'align-items': slide.alignment || 'center'}">
+                        <wwLayoutColumn class="inner-content" tag="div" ww-default="ww-image" :ww-list="slide.innerContent" @ww-add="add(slide.innerContent, $event)" @ww-remove="remove(slide.innerContent, $event)">
+                            <wwObject v-for="obj in slide.innerContent" :key="obj.uniqueId" v-bind:ww-object="obj"></wwObject>
+                        </wwLayoutColumn>
+                    </span>
                 </div>
             </div>
             <div class="controls-bottom">
                 <div class="current" :style="currentBulletPosition"></div>
-                <div class="bullet" v-for="(img, index) in imgs" :key="index" @click="activeIndex = index; startInterval()"></div>
+                <div class="bullet" v-for="(slide, index) in slides" :key="index" @click="activeIndex = index; startInterval()"></div>
             </div>
         </div>
     </div>
@@ -29,7 +34,10 @@
 <script>
 /* wwManager:start */
 import wwSliderPopupStyle from './wwSliderPopupStyle.vue'
+import wwSliderPopupColorContent from './wwSliderPopupColorContent.vue'
+
 wwLib.wwPopups.addPopup('wwSliderPopupStyle', wwSliderPopupStyle);
+wwLib.wwPopups.addPopup('wwSliderPopupColorContent', wwSliderPopupColorContent);
 /* wwManager:end */
 
 export default {
@@ -79,12 +87,12 @@ export default {
 
             return style;
         },
-        imgs() {
-            return this.wwObject.content.data.imgs;
+        slides() {
+            return this.wwObject.content.data.slides;
         },
         currentBulletPosition() {
             return {
-                transform: 'translateX(' + (30 * Math.min(this.activeIndex, this.imgs.length - 1)) + 'px)'
+                transform: 'translateX(' + (30 * Math.min(this.activeIndex, this.slides.length - 1)) + 'px)'
             }
         },
         ratio() {
@@ -120,18 +128,31 @@ export default {
             this.startInterval();
         },
         initData() {
-            if (!this.wwObject.content.data.imgs || !this.wwObject.content.data.imgs.length) {
-                this.wwObject.content.data.imgs = [];
+            if (!this.wwObject.content.data.slides || !this.wwObject.content.data.slides.length) {
+                this.wwObject.content.data.slides = [];
 
-                let imgs = [];
+                const slides = [];
                 const count = 4;
                 for (let i = 0; i < count; i++) {
-                    imgs.push(wwLib.wwObject.getDefault({ type: 'ww-image' }));
+                    const slide = {
+                        img: wwLib.wwObject.getDefault({ type: 'ww-image' }),
+                        innerContent: [],
+                        uniqueId: wwLib.wwUtils.getUniqueId()
+                    }
+                    slides.push(slide);
                 }
 
-                this.wwObject.content.data.imgs = imgs;
+                this.wwObject.content.data.slides = slides;
                 this.wwObjectCtrl.update(this.wwObject);
             }
+        },
+        add(list, options) {
+            list.splice(options.index, 0, options.wwObject);
+            this.wwObjectCtrl.update(this.wwObject);
+        },
+        remove(list, options) {
+            list.splice(options.index, 1);
+            this.wwObjectCtrl.update(this.wwObject);
         },
         startInterval() {
             let self = this;
@@ -142,7 +163,7 @@ export default {
                 }
 
                 self.activeIndex++;
-                if (self.activeIndex > self.imgs.length - 1) {
+                if (self.activeIndex > self.slides.length - 1) {
                     self.activeIndex = 0;
                 }
             }, this.wwObject.content.data.duration || 3000);
@@ -156,14 +177,14 @@ export default {
             return '';
         },
         getSlidePosition(index) {
-            const i = Math.min(this.activeIndex, this.imgs.length - 1);
+            const i = Math.min(this.activeIndex, this.slides.length - 1);
             const t = Math.min(Math.max(index - i, -1), 1) * 100;
             return {
                 transform: 'translateX(' + t + '%)'
             }
         },
         getImagePosition(index) {
-            const i = Math.min(this.activeIndex, this.imgs.length - 1);
+            const i = Math.min(this.activeIndex, this.slides.length - 1);
             const t = Math.min(Math.max(i - index, -1), 1) * (this.wwObject.content.data.offset || 50);
             return {
                 transform: 'translateX(' + t + '%)'
@@ -175,15 +196,24 @@ export default {
           MANAGER SLIDES
         \================================================================================================*/
         addSlide(index, offset) {
-            const obj = wwLib.wwObject.getDefault({ type: 'ww-image' });
-            this.wwObject.content.data.imgs.splice(index + offset, 0, obj);
+            const slide = {
+                img: wwLib.wwObject.getDefault({ type: 'ww-image' }),
+                innerContent: [],
+                uniqueId: wwLib.wwUtils.getUniqueId()
+            }
+            this.wwObject.content.data.slides.splice(index + offset, 0, slide);
             this.wwObjectCtrl.update(this.wwObject);
             this.activeIndex = index + offset;
         },
         removeSlide(index) {
-            this.wwObject.content.data.imgs.splice(index, 1);
-            if (!this.wwObject.content.data.imgs.length) {
-                this.wwObject.content.data.imgs.push(wwLib.wwObject.getDefault({ type: 'ww-image' }));
+            this.wwObject.content.data.slides.splice(index, 1);
+            if (!this.wwObject.content.data.slides.length) {
+                const slide = {
+                    img: wwLib.wwObject.getDefault({ type: 'ww-image' }),
+                    innerContent: [],
+                    uniqueId: wwLib.wwUtils.getUniqueId()
+                }
+                this.wwObject.content.data.slides.push(slide);
             }
             this.wwObjectCtrl.update(this.wwObject);
         },
@@ -220,6 +250,19 @@ export default {
                             shortcut: 's',
                             next: 'WWSLIDER_STYLE'
                         },
+                        EDIT_COLOR_CONTENT: {
+                            title: {
+                                en: 'Change color and content',
+                                fr: 'Changer les couleurs et le contenu'
+                            },
+                            desc: {
+                                en: 'update bullet colors and content position',
+                                fr: 'changez la couleurs des points et la position du contenu'
+                            },
+                            icon: 'wwi wwi-edit-style',
+                            shortcut: 's',
+                            next: 'WWSLIDER_COLOR_CONTENT'
+                        },
                         EDIT_RATIO: {
                             title: {
                                 en: 'Change slider ratio',
@@ -231,7 +274,7 @@ export default {
                             },
                             icon: 'wwi wwi-ratio',
                             shortcut: 'r',
-                            next: 'WWIMAGE_RATIO'
+                            next: 'WWSLIDER_RATIO'
                         },
                         EDIT_ANIM: {
                             separator: {
@@ -249,22 +292,6 @@ export default {
                             icon: 'wwi wwi-anim',
                             shortcut: 'a',
                             next: 'ANIMATION'
-                        },
-                        EDIT_HIDE: {
-                            separator: {
-                                en: 'More',
-                                fr: 'Plus'
-                            },
-                            title: {
-                                en: 'Show / Hide',
-                                fr: 'Montrer / Cacher'
-                            },
-                            icon: 'wwi wwi-hidden',
-                            shortcut: 'h',
-                            next: null,
-                            result: {
-                                hidden: true
-                            }
                         },
                         EDIT_CHANGE: {
                             title: {
@@ -290,16 +317,33 @@ export default {
                             en: 'Next',
                             fr: 'Suivant'
                         },
-                        next: 'WWSTYLE_STYLE'
+                        next: false
                     }
                 }
             })
-            wwLib.wwPopups.addStory('WWSTYLE_STYLE', {
+            wwLib.wwPopups.addStory('WWSLIDER_STYLE', {
                 title: {
                     en: 'Image style',
                     fr: 'Style de l\'image'
                 },
                 type: 'wwPopupImageStyle',
+                buttons: {
+                    OK: {
+                        text: {
+                            en: 'Ok',
+                            fr: 'Valider'
+                        },
+                        next: false
+                    }
+                }
+            })
+
+            wwLib.wwPopups.addStory('WWSLIDER_COLOR_CONTENT', {
+                title: {
+                    en: 'Color & content',
+                    fr: 'Couleur et contenu'
+                },
+                type: 'wwSliderPopupColorContent',
                 buttons: {
                     OK: {
                         text: {
@@ -321,6 +365,8 @@ export default {
             try {
                 const result = await wwLib.wwPopups.open(options);
 
+                console.log(result)
+
                 /*=============================================m_ÔÔ_m=============================================\
                   STYLE
                 \================================================================================================*/
@@ -341,6 +387,9 @@ export default {
                 }
                 if (typeof (result.ratio) != 'undefined') {
                     this.wwObject.ratio = result.ratio;
+                }
+                if (typeof (result.align) != 'undefined') {
+                    this.wwObject.content.data.slides[this.activeIndex].alignment = result.align;
                 }
 
 
@@ -478,6 +527,15 @@ export default {
                 width: 100%;
                 height: 100%;
                 transition: transform 0.3s ease;
+
+                .inner-content-container {
+                    display: flex;
+                    height: 100%;
+                    width: 100%;
+                }
+                .inner-content {
+                    width: 100%;
+                }
 
                 .image {
                     position: absolute;
