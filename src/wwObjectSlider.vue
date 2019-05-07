@@ -310,7 +310,7 @@ export default {
                     en: 'Slider Ratio',
                     fr: 'Ratio du slider'
                 },
-                type: 'wwPopupImageRatio',
+                type: 'wwPopupWwObjectRatio',
                 buttons: {
                     NEXT: {
                         text: {
@@ -326,7 +326,7 @@ export default {
                     en: 'Image style',
                     fr: 'Style de l\'image'
                 },
-                type: 'wwPopupImageStyle',
+                type: 'wwPopupWwObjectStyle',
                 buttons: {
                     OK: {
                         text: {
