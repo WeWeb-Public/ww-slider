@@ -80,7 +80,9 @@ export default {
             let style = {};
             let wwObjectStyle = this.wwObject.content.data.style || {};
 
-            style.borderRadius = (wwObjectStyle.borderRadius || 0) + 'px';
+            const unit = wwObjectStyle.borderRadiusUnit || '%';
+            const borderRadius = (wwObjectStyle.borderRadius / (unit == '%' ? 2 : 1) || 0) + unit;
+            style.borderRadius = borderRadius;
             style.borderWidth = (wwObjectStyle.borderWidth || 0) + 'px';
             style.borderColor = wwObjectStyle.borderColor || '#000000';
             style.borderStyle = wwObjectStyle.borderStyle || 'solid';
@@ -375,6 +377,9 @@ export default {
                 }
                 if (typeof (result.borderRadius) != 'undefined') {
                     this.wwObject.content.data.style.borderRadius = result.borderRadius;
+                }
+                if (typeof (result.borderRadiusUnit) != 'undefined') {
+                    this.wwObject.content.data.style.borderRadiusUnit = result.borderRadiusUnit;
                 }
                 if (typeof (result.borderStyle) != 'undefined') {
                     this.wwObject.content.data.style.borderStyle = result.borderStyle;
