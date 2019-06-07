@@ -10,9 +10,16 @@ const addComponent = function () {
             content: {
                 type: name,
                 data: {
+                    autoplay: true,
+                    activeDotColor: '#1E88E5',
+                    dotPosition: 'inside',
+                    dotsBorderColor: '#1E88E5',
+                    intervalDelay: 3,
+                    navigationDots: false,
+                    animationDuration: 0.3,
+                    overlap: false,
                     slides: [
                     ],
-                    duration: 3000,
                     offset: 50,
                     style: {
                         borderRadius: 0,
