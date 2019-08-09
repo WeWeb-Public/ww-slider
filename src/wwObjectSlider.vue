@@ -13,40 +13,11 @@
                     <span class="wwi wwi-add"></span>
                 </div>
                 <!-- wwManager:end -->
-                <v-touch
-                    ref="swiper"
-                    :enabled="!editMode"
-                    @swipeleft="nextSlide()"
-                    @swiperight="prevSlide()"
-                    :swipe-options="{ direction: 'horizontal', threshold: 10, velocity: 0.2 }"
-                    class="slide"
-                    v-for="(slide, index) in slides"
-                    :key="slide.uniqueId"
-                    :style="getSlidePosition(index)"
-                >
+                <v-touch ref="swiper" :enabled="!editMode" @swipeleft="nextSlide()" @swiperight="prevSlide()" :swipe-options="{ direction: 'horizontal', threshold: 10, velocity: 0.2 }" class="slide" v-for="(slide, index) in slides" :key="slide.uniqueId" :style="getSlidePosition(index)">
                     <div class="slide-content" :style="getImagePosition(index)">
-                        <wwObject
-                            class="image"
-                            :ww-object="slide.img"
-                            :ww-fixed-ratio="ratio"
-                            ww-inside-ww-object="ww-slider"
-                            ww-default-object-type="ww-image"
-                            ww-object-types-allowed="['ww-image']"
-                            :ww-no-section="wwAttrs.wwNoSection"
-                            :ww-no-link="wwAttrs.wwNoLink"
-                            @ww-add-before="addSlide(index, 0)"
-                            @ww-add-after="addSlide(index, 1)"
-                            @ww-remove="removeSlide(index)"
-                        ></wwObject>
+                        <wwObject class="image" :ww-object="slide.img" :ww-fixed-ratio="ratio" ww-inside-ww-object="ww-slider" ww-default-object-type="ww-image" ww-object-types-allowed="['ww-image']" :ww-no-section="wwAttrs.wwNoSection" :ww-no-link="wwAttrs.wwNoLink" @ww-add-before="addSlide(index, 0)" @ww-add-after="addSlide(index, 1)" @ww-remove="removeSlide(index)"></wwObject>
                         <span class="inner-content-container" :style="{'align-items': slide.alignment || 'center'}">
-                            <wwLayoutColumn
-                                class="inner-content"
-                                tag="div"
-                                ww-default="ww-image"
-                                :ww-list="slide.innerContent"
-                                @ww-add="add(slide.innerContent, $event)"
-                                @ww-remove="remove(slide.innerContent, $event)"
-                            >
+                            <wwLayoutColumn class="inner-content" tag="div" ww-default="ww-image" :ww-list="slide.innerContent" @ww-add="add(slide.innerContent, $event)" @ww-remove="remove(slide.innerContent, $event)">
                                 <wwObject v-for="obj in slide.innerContent" :key="obj.uniqueId" v-bind:ww-object="obj"></wwObject>
                             </wwLayoutColumn>
                         </span>
@@ -107,7 +78,7 @@ export default {
         },
         style() {
             let style = {};
-            let wwObjectStyle = this.wwObject.content.data.style || {};
+            let wwObjectStyle = this.wwObject.style || {};
 
             style.boxShadow = this.getShadow();
             style.paddingBottom = this.ratio + '%';
@@ -116,7 +87,7 @@ export default {
         },
         contentStyle() {
             let style = {};
-            let wwObjectStyle = this.wwObject.content.data.style || {};
+            let wwObjectStyle = this.wwObject.style || {};
 
             style.borderRadius = (wwObjectStyle.borderRadius || 0) + 'px';
 
@@ -124,7 +95,7 @@ export default {
         },
         borderStyle() {
             let style = {};
-            let wwObjectStyle = this.wwObject.content.data.style || {};
+            let wwObjectStyle = this.wwObject.style || {};
 
             const unit = wwObjectStyle.borderRadiusUnit || '%';
             const borderRadius = (wwObjectStyle.borderRadius / (unit == '%' ? 2 : 1) || 0) + unit;
@@ -136,10 +107,10 @@ export default {
             return style;
         },
         overlap() {
-            return this.wwObject.content.data.overlap
+            return this.wwObject.data.overlap
         },
         slides() {
-            return this.wwObject.content.data.slides;
+            return this.wwObject.data.slides;
         },
         currentBulletStyle() {
             return {
@@ -177,26 +148,26 @@ export default {
         },
 
         activeDotColor() {
-            return this.wwObject.content.data.activeDotColor
+            return this.wwObject.data.activeDotColor
         },
         dotsBorderColor() {
-            return this.wwObject.content.data.dotsBorderColor
+            return this.wwObject.data.dotsBorderColor
         },
         intervalDelay() {
-            return this.wwObject.content.data.intervalDelay
+            return this.wwObject.data.intervalDelay
         },
         navigationDots() {
-            return this.wwObject.content.data.navigationDots
+            return this.wwObject.data.navigationDots
         },
         dotPosition() {
-            return this.wwObject.content.data.dotPosition
+            return this.wwObject.data.dotPosition
         },
         overlap() {
-            return this.wwObject.content.data.overlap
+            return this.wwObject.data.overlap
         },
         animationDuration() {
-            return this.wwObject.content.data.animationDuration
-        },
+            return this.wwObject.data.animationDuration
+        }
     },
     watch: {
     },
@@ -205,8 +176,9 @@ export default {
             this.autoplay();
         },
         initData() {
-            if (!this.wwObject.content.data.slides || !this.wwObject.content.data.slides.length) {
-                this.wwObject.content.data.slides = [];
+            let needUpdate = false;
+            if (!this.wwObject.data.slides || !this.wwObject.data.slides.length) {
+                this.wwObject.data.slides = [];
 
                 const slides = [];
                 const count = 4;
@@ -218,52 +190,57 @@ export default {
                     }
                     slides.push(slide);
                 }
-                this.wwObject.content.data.slides = slides;
+                this.wwObject.data.slides = slides;
+
+                needUpdate = true;
             }
-            if (!this.wwObject.content.data.autoplay) {
-                this.wwObject.content.data.autoplay = true;
+            if (!this.wwObject.data.autoplay) {
+                this.wwObject.data.autoplay = true;
+                needUpdate = true;
             }
 
-            if (!this.wwObject.content.data.dotPosition) {
-                this.wwObject.content.data.dotPosition = 'inside';
+            if (!this.wwObject.data.dotPosition) {
+                this.wwObject.data.dotPosition = 'inside';
+                needUpdate = true;
             }
 
-            if (!this.wwObject.content.data.activeDotColor) {
-                this.wwObject.content.data.activeDotColor = '#1E88E5';
+            if (!this.wwObject.data.activeDotColor) {
+                this.wwObject.data.activeDotColor = '#FFFFFF';
+                needUpdate = true;
             }
 
-            if (!this.wwObject.content.data.dotsBorderColor) {
-                this.wwObject.content.data.dotsBorderColor = '#1E88E5';
+            if (!this.wwObject.data.dotsBorderColor) {
+                this.wwObject.data.dotsBorderColor = '#FFFFFF';
+                needUpdate = true;
             }
 
-            if (!this.wwObject.content.data.intervalDelay) {
-                this.wwObject.content.data.intervalDelay = 3;
+            if (!this.wwObject.data.intervalDelay) {
+                this.wwObject.data.intervalDelay = 3;
+                needUpdate = true;
             }
 
-            if (!this.wwObject.content.data.navigationDots) {
-                this.wwObject.content.data.navigationDots = false;
+            if (!this.wwObject.data.navigationDots) {
+                this.wwObject.data.navigationDots = false;
+                needUpdate = true;
             }
 
-            if (!this.wwObject.content.data.overlap) {
-                this.wwObject.content.data.overlap = false;
+            if (!this.wwObject.data.overlap) {
+                this.wwObject.data.overlap = false;
+                needUpdate = true;
             }
-            if (!this.wwObject.content.data.animationDuration) {
-                this.wwObject.content.data.animationDuration = 0.3;
+            if (!this.wwObject.data.animationDuration) {
+                this.wwObject.data.animationDuration = 0.3;
+                needUpdate = true;
             }
-            this.wwObjectCtrl.update(this.wwObject);
-        },
-        add(list, options) {
-            list.splice(options.index, 0, options.wwObject);
-            this.wwObjectCtrl.update(this.wwObject);
-        },
-        remove(list, options) {
-            list.splice(options.index, 1);
-            this.wwObjectCtrl.update(this.wwObject);
+
+            if (needUpdate) {
+                this.wwObjectCtrl.update(this.wwObject);
+            }
         },
         autoplay() {
             try {
                 clearInterval(this.slideInterval);
-                if (this.wwObject.content.data.autoplay) {
+                if (this.wwObject.data.autoplay) {
                     this.startSliderAnimation()
                 } else {
                     clearInterval(this.slideInterval);
@@ -286,7 +263,7 @@ export default {
                     if (self.activeIndex > self.slides.length - 1) {
                         self.activeIndex = 0;
                     }
-                }, (this.wwObject.content.data.intervalDelay * 1000) || 3000);
+                }, (this.wwObject.data.intervalDelay * 1000) || 3000);
             } catch (error) {
                 console.error(error)
             }
@@ -322,7 +299,7 @@ export default {
 
         },
         getShadow() {
-            let wwObjectStyle = this.wwObject.content.data.style || {};
+            let wwObjectStyle = this.wwObject.style || {};
             const shadow = wwObjectStyle.boxShadow || {};
             if (shadow.x || shadow.y || shadow.b || shadow.s || shadow.c) {
                 return shadow.x + 'px ' + shadow.y + 'px ' + shadow.b + 'px ' + shadow.s + 'px ' + shadow.c;
@@ -347,7 +324,7 @@ export default {
             try {
                 if (!this.overlap) {
                     const i = Math.min(this.activeIndex, this.slides.length - 1);
-                    const t = Math.min(Math.max(i - index, -1), 1) * (this.wwObject.content.data.offset || 50);
+                    const t = Math.min(Math.max(i - index, -1), 1) * (this.wwObject.data.offset || 50);
                     return {
                         transform: 'translateX(' + t + '%)',
                         'transition-duration': this.animationDuration + 's'
@@ -374,21 +351,29 @@ export default {
                 innerContent: [],
                 uniqueId: wwLib.wwUtils.getUniqueId()
             }
-            this.wwObject.content.data.slides.splice(index + offset, 0, slide);
+            this.wwObject.data.slides.splice(index + offset, 0, slide);
             this.wwObjectCtrl.update(this.wwObject);
             this.activeIndex = index + offset;
         },
 
         removeSlide(index) {
-            this.wwObject.content.data.slides.splice(index, 1);
-            if (!this.wwObject.content.data.slides.length) {
+            this.wwObject.data.slides.splice(index, 1);
+            if (!this.wwObject.data.slides.length) {
                 const slide = {
                     img: wwLib.wwObject.getDefault({ type: 'ww-image' }),
                     innerContent: [],
                     uniqueId: wwLib.wwUtils.getUniqueId()
                 }
-                this.wwObject.content.data.slides.push(slide);
+                this.wwObject.data.slides.push(slide);
             }
+            this.wwObjectCtrl.update(this.wwObject);
+        },
+        add(list, options) {
+            list.splice(options.index, 0, options.wwObject);
+            this.wwObjectCtrl.update(this.wwObject);
+        },
+        remove(list, options) {
+            list.splice(options.index, 1);
             this.wwObjectCtrl.update(this.wwObject);
         },
 
@@ -511,7 +496,7 @@ export default {
                             },
                             type: 'select',
                             key: 'dotPosition',
-                            valueData: 'wwObject.content.data.dotPosition',
+                            valueData: 'wwObject.data.dotPosition',
                             options: {
                                 type: 'text',
                                 values: [
@@ -542,7 +527,7 @@ export default {
                             },
                             type: 'radio',
                             key: 'dots',
-                            valueData: 'wwObject.content.data.navigationDots',
+                            valueData: 'wwObject.data.navigationDots',
                         },
                         {
                             label: {
@@ -551,7 +536,7 @@ export default {
                             },
                             type: 'color',
                             key: 'activeDotColor',
-                            valueData: 'wwObject.content.data.activeDotColor',
+                            valueData: 'wwObject.data.activeDotColor',
                             desc: {
                                 en: 'The color of the active navigation dot color:',
                                 fr: 'La couleur du point de navigation actif :'
@@ -564,7 +549,7 @@ export default {
                             },
                             type: 'color',
                             key: 'dotsBorderColor',
-                            valueData: 'wwObject.content.data.dotsBorderColor',
+                            valueData: 'wwObject.data.dotsBorderColor',
                             desc: {
                                 en: 'Navigation dots border color:',
                                 fr: 'Couleur de la bordure des points de navigations :'
@@ -578,7 +563,7 @@ export default {
                             },
                             type: 'radio',
                             key: 'autoplay',
-                            valueData: 'wwObject.content.data.autoplay',
+                            valueData: 'wwObject.data.autoplay',
                             desc: {
                                 en: 'Enable the slider automatic transition:',
                                 fr: 'Activer la transition automatique du carousel :'
@@ -591,7 +576,7 @@ export default {
                             },
                             type: 'radio',
                             key: 'overlap',
-                            valueData: 'wwObject.content.data.overlap',
+                            valueData: 'wwObject.data.overlap',
                             desc: {
                                 en: 'Disable the animation mode overlay:',
                                 fr: 'Désactiver lanimation de type overlay :'
@@ -604,7 +589,7 @@ export default {
                             },
                             type: 'text',
                             key: 'intervalDuration',
-                            valueData: 'wwObject.content.data.intervalDelay',
+                            valueData: 'wwObject.data.intervalDelay',
                             desc: {
                                 en: 'The duration of the interval between each slider transition in s',
                                 fr: 'La durée de l\'intervalle entre chaque transition de slider en s'
@@ -617,7 +602,7 @@ export default {
                             },
                             type: 'text',
                             key: 'animationDuration',
-                            valueData: 'wwObject.content.data.animationDuration',
+                            valueData: 'wwObject.data.animationDuration',
                             desc: {
                                 en: 'The duration of each transition in s',
                                 fr: 'La durée de chaque transition en s'
@@ -704,59 +689,59 @@ export default {
                   STYLE
                 \================================================================================================*/
                 if (typeof (result.borderColor) != 'undefined') {
-                    this.wwObject.content.data.style.borderColor = result.borderColor;
+                    this.wwObject.style.borderColor = result.borderColor;
                 }
                 if (typeof (result.borderRadius) != 'undefined') {
-                    this.wwObject.content.data.style.borderRadius = result.borderRadius;
+                    this.wwObject.style.borderRadius = result.borderRadius;
                 }
                 if (typeof (result.borderRadiusUnit) != 'undefined') {
-                    this.wwObject.content.data.style.borderRadiusUnit = result.borderRadiusUnit;
+                    this.wwObject.style.borderRadiusUnit = result.borderRadiusUnit;
                 }
                 if (typeof (result.borderStyle) != 'undefined') {
-                    this.wwObject.content.data.style.borderStyle = result.borderStyle;
+                    this.wwObject.style.borderStyle = result.borderStyle;
                 }
                 if (typeof (result.borderWidth) != 'undefined') {
-                    this.wwObject.content.data.style.borderWidth = result.borderWidth;
+                    this.wwObject.style.borderWidth = result.borderWidth;
                 }
                 if (typeof (result.boxShadow) != 'undefined') {
-                    this.wwObject.content.data.style.boxShadow = result.boxShadow;
+                    this.wwObject.style.boxShadow = result.boxShadow;
                 }
                 if (typeof (result.ratio) != 'undefined') {
                     this.wwObject.ratio = result.ratio;
                 }
                 /* slider options */
                 if (typeof (result.intervalDuration) != 'undefined') {
-                    this.wwObject.content.data.intervalDelay = result.intervalDuration;
+                    this.wwObject.data.intervalDelay = result.intervalDuration;
                 }
                 if (typeof (result.activeDotColor) != 'undefined') {
-                    this.wwObject.content.data.activeDotColor = result.activeDotColor;
+                    this.wwObject.data.activeDotColor = result.activeDotColor;
                 }
                 if (typeof (result.dotsBorderColor) != 'undefined') {
-                    this.wwObject.content.data.dotsBorderColor = result.dotsBorderColor;
+                    this.wwObject.data.dotsBorderColor = result.dotsBorderColor;
                 }
                 if (typeof (result.autoplay) != 'undefined') {
-                    this.wwObject.content.data.autoplay = result.autoplay;
+                    this.wwObject.data.autoplay = result.autoplay;
                     this.autoplay();
                 }
                 if (typeof (result.dots) != 'undefined') {
-                    this.wwObject.content.data.navigationDots = result.dots;
+                    this.wwObject.data.navigationDots = result.dots;
                 }
                 if (typeof (result.dotPosition) != 'undefined') {
-                    this.wwObject.content.data.dotPosition = result.dotPosition;
+                    this.wwObject.data.dotPosition = result.dotPosition;
                 }
                 if (typeof (result.overlap) != 'undefined') {
-                    this.wwObject.content.data.overlap = result.overlap;
+                    this.wwObject.data.overlap = result.overlap;
                 }
                 if (typeof (result.animationDuration) != 'undefined') {
                     if (result.animationDuration > result.intervalDuration) {
                         result.animationDuration = result.intervalDuration
                     }
-                    this.wwObject.content.data.animationDuration = result.animationDuration;
+                    this.wwObject.data.animationDuration = result.animationDuration;
                 }
                 /* slider op end */
 
                 if (typeof (result.align) != 'undefined') {
-                    this.wwObject.content.data.slides[this.activeIndex].alignment = result.align;
+                    this.wwObject.data.slides[this.activeIndex].alignment = result.align;
                 }
 
                 this.wwObjectCtrl.update(this.wwObject);
@@ -909,9 +894,10 @@ export default {
 
                 .image {
                     position: absolute;
-                    top: 0;
-                    left: 0;
+                    top: 50%;
+                    left: 50%;
                     width: 100%;
+                    transform: translate(-50%, -50%);
                 }
             }
         }

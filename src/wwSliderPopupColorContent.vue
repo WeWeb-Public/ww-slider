@@ -137,7 +137,7 @@ export default {
         },
         setProp(key, value) {
             this.props[key] = value;
-            this.options.data.wwObject.content.data[key] = value;
+            this.options.data.wwObject.data[key] = value;
             this.updateWwObject();
             this.$forceUpdate();
         }
@@ -148,7 +148,7 @@ export default {
     created() {
         this.options.data.wwObject.uniqueId = wwLib.wwUtils.getUniqueId();
         for (let key in this.props) {
-            this.props[key] = this.options.data.wwObject.content.data[key] || this.props[key];
+            this.props[key] = this.options.data.wwObject.data[key] || this.props[key];
         }
     },
     beforeDestroy() {

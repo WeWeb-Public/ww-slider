@@ -127,7 +127,7 @@ export default {
                 type: 'wwObject',
                 wwObject: this.options.data.wwObject,
                 data: {
-                    url: this.options.data.wwObject.content.data.url
+                    url: this.options.data.wwObject.data.url
                 },
                 values: [
                     {
@@ -348,36 +348,36 @@ export default {
             this.setResult();
         },
         setValue(prop, value) {
-            this.options.data.wwObject.content.data.style = this.options.data.wwObject.content.data.style || {};
+            this.options.data.wwObject.style = this.options.data.wwObject.style || {};
 
             this.props[prop] = value;
-            this.options.data.wwObject.content.data.style[prop] = value;
+            this.options.data.wwObject.style[prop] = value;
 
             if (prop == 'borderWidth') {
                 if (value == 0) {
                     this.props.borderStyle = 'none';
-                    this.options.data.wwObject.content.data.style.borderStyle = 'none';
+                    this.options.data.wwObject.style.borderStyle = 'none';
                 }
                 else if (this.props.borderStyle == 'none') {
                     this.props.borderStyle = 'solid';
-                    this.options.data.wwObject.content.data.style.borderStyle = 'solid';
+                    this.options.data.wwObject.style.borderStyle = 'solid';
                 }
             }
 
             if (prop == 'borderStyle') {
                 if (value == 'none') {
                     this.props.borderWidth = 0;
-                    this.options.data.wwObject.content.data.style.borderWidth = 0;
+                    this.options.data.wwObject.style.borderWidth = 0;
                 }
                 else if (this.props.borderWidth == 0) {
                     this.props.borderWidth = 2;
-                    this.options.data.wwObject.content.data.style.borderWidth = 2;
+                    this.options.data.wwObject.style.borderWidth = 2;
                 }
             }
 
             if (prop == 'borderColor') {
-                this.props.borderWidth = this.options.data.wwObject.content.data.style.borderWidth || 1;
-                this.options.data.wwObject.content.data.style.borderWidth = this.props.borderWidth;
+                this.props.borderWidth = this.options.data.wwObject.style.borderWidth || 1;
+                this.options.data.wwObject.style.borderWidth = this.props.borderWidth;
             }
 
             this.updateWwObject();
@@ -391,14 +391,14 @@ export default {
     created() {
         this.options.data.wwObject.uniqueId = wwLib.wwUtils.getUniqueId();
 
-        this.options.data.wwObject.content.data.zoom = this.options.data.wwObject.content.data.zoom || -1;
-        this.options.data.wwObject.content.data.position = this.options.data.wwObject.content.data.position || { x: 0, y: 0 };
+        this.options.data.wwObject.data.zoom = this.options.data.wwObject.data.zoom || -1;
+        this.options.data.wwObject.data.position = this.options.data.wwObject.data.position || { x: 0, y: 0 };
 
-        this.options.data.wwObject.content.data.style = this.options.data.wwObject.content.data.style || {};
+        this.options.data.wwObject.style = this.options.data.wwObject.style || {};
 
 
         for (let key in this.props) {
-            this.props[key] = this.options.data.wwObject.content.data.style[key] || this.props[key];
+            this.props[key] = this.options.data.wwObject.style[key] || this.props[key];
         }
     },
     beforeDestroy() {

@@ -7,13 +7,34 @@ const addComponent = function () {
     if (window.vm) {
 
         wwLib.wwObject.register({
+            /* wwManager:start */
+            cmsOptions: {
+                wwObjectHover: {
+                    pluses: false,
+                },
+                wwObjectMenu: {
+                    items: [
+                        {
+                            name: 'OPTIONS',
+                            main: true,
+                            text: {
+                                en: 'Options',
+                                fr: 'Options'
+                            },
+                            icon: 'wwi wwi-edit-other',
+                            action: 'edit'
+                        }
+                    ]
+                }
+            },
+            /* wwManager:end */
             content: {
                 type: name,
                 data: {
                     autoplay: true,
-                    activeDotColor: '#1E88E5',
+                    activeDotColor: '#FFFFFF',
                     dotPosition: 'inside',
-                    dotsBorderColor: '#1E88E5',
+                    dotsBorderColor: '#FFFFFF',
                     intervalDelay: 3,
                     navigationDots: false,
                     animationDuration: 0.3,
@@ -40,28 +61,7 @@ const addComponent = function () {
                 wwAnalytics: {
                     click: true
                 }
-            },
-            /* wwManager:start */
-            cmsOptions: {
-                wwObjectHover: {
-                    pluses: false,
-                },
-                wwObjectMenu: {
-                    items: [
-                        {
-                            name: 'OPTIONS',
-                            main: true,
-                            text: {
-                                en: 'Options',
-                                fr: 'Options'
-                            },
-                            icon: 'wwi wwi-edit-other',
-                            action: 'edit'
-                        }
-                    ]
-                }
             }
-            /* wwManager:end */
         });
 
         window.vm.addComponent({
