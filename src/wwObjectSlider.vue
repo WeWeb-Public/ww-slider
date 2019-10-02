@@ -13,40 +13,11 @@
                     <span class="wwi wwi-add"></span>
                 </div>
                 <!-- wwManager:end -->
-                <v-touch
-                    ref="swiper"
-                    :enabled="!editMode"
-                    @swipeleft="nextSlide()"
-                    @swiperight="prevSlide()"
-                    :swipe-options="{ direction: 'horizontal', threshold: 10, velocity: 0.2 }"
-                    class="slide"
-                    v-for="(slide, index) in slides"
-                    :key="slide.uniqueId"
-                    :style="getSlidePosition(index)"
-                >
+                <v-touch ref="swiper" :enabled="!editMode" @swipeleft="nextSlide()" @swiperight="prevSlide()" :swipe-options="{ direction: 'horizontal', threshold: 10, velocity: 0.2 }" class="slide" v-for="(slide, index) in slides" :key="slide.uniqueId" :style="getSlidePosition(index)">
                     <div class="slide-content" :style="getImagePosition(index)">
-                        <wwObject
-                            class="image"
-                            :ww-object="slide.img"
-                            :ww-fixed-ratio="ratio"
-                            ww-inside-ww-object="ww-slider"
-                            ww-default-object-type="ww-image"
-                            ww-object-types-allowed="['ww-image']"
-                            :ww-no-section="wwAttrs.wwNoSection"
-                            :ww-no-link="wwAttrs.wwNoLink"
-                            @ww-add-before="addSlide(index, 0)"
-                            @ww-add-after="addSlide(index, 1)"
-                            @ww-remove="removeSlide(index)"
-                        ></wwObject>
+                        <wwObject class="image" :ww-object="slide.img" :ww-fixed-ratio="ratio" ww-inside-ww-object="ww-slider" ww-default-object-type="ww-image" ww-object-types-allowed="['ww-image']" :ww-no-section="wwAttrs.wwNoSection" :ww-no-link="wwAttrs.wwNoLink" @ww-add-before="addSlide(index, 0)" @ww-add-after="addSlide(index, 1)" @ww-remove="removeSlide(index)"></wwObject>
                         <span class="inner-content-container" :style="{'align-items': slide.alignment || 'center'}">
-                            <wwLayoutColumn
-                                class="inner-content"
-                                tag="div"
-                                ww-default="ww-image"
-                                :ww-list="slide.innerContent"
-                                @ww-add="add(slide.innerContent, $event)"
-                                @ww-remove="remove(slide.innerContent, $event)"
-                            >
+                            <wwLayoutColumn class="inner-content" tag="div" ww-default="ww-image" :ww-list="slide.innerContent" @ww-add="add(slide.innerContent, $event)" @ww-remove="remove(slide.innerContent, $event)">
                                 <wwObject v-for="obj in slide.innerContent" :key="obj.uniqueId" v-bind:ww-object="obj"></wwObject>
                             </wwLayoutColumn>
                         </span>
@@ -911,6 +882,7 @@ export default {
                     position: absolute;
                     top: 0;
                     left: 0;
+                    height: 100%;
                     width: 100%;
                 }
             }
