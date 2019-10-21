@@ -81,7 +81,13 @@ export default {
             let wwObjectStyle = this.wwObject.content.data.style || {};
 
             style.boxShadow = this.getShadow();
-            style.paddingBottom = this.ratio + '%';
+
+            if (this.wwAttrs && this.wwAttrs.wwCategory == 'background') {
+                style.height = '100%';
+            }
+            else {
+                style.paddingBottom = this.ratio + '%';
+            }
 
             return style;
         },
