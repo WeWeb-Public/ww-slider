@@ -787,7 +787,11 @@ export default {
         color: #fff;
         height: 40px;
         width: 45px;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
         justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
         font-size: 45px;
     }
@@ -814,18 +818,26 @@ export default {
             position: absolute;
             top: 50%;
             left: 50%;
+            -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
             color: white;
             cursor: pointer;
             pointer-events: all;
             font-size: 18px;
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             width: 25px;
             height: 25px;
             border-radius: 100%;
             background-color: #1763a9;
+            background: -webkit-gradient(linear, left top, right top, from(#1763a9), to(#2e85c2));
             background: linear-gradient(to right, #1763a9 0%, #2e85c2 100%);
         }
 
@@ -833,6 +845,7 @@ export default {
             position: absolute;
             bottom: 10px;
             left: 50%;
+            -webkit-transform: translateX(-50%);
             transform: translateX(-50%);
             white-space: nowrap;
 
@@ -854,7 +867,10 @@ export default {
                 top: 5px;
                 left: 10px;
                 border-radius: 100%;
+                -webkit-transition: -webkit-transform 0.3s ease;
+                transition: -webkit-transform 0.3s ease;
                 transition: transform 0.3s ease;
+                transition: transform 0.3s ease, -webkit-transform 0.3s ease;
                 opacity: 0.8;
             }
         }
@@ -865,7 +881,10 @@ export default {
             left: 0;
             right: 0;
             bottom: 0;
+            -webkit-transition: -webkit-transform ease;
+            transition: -webkit-transform ease;
             transition: transform ease;
+            transition: transform ease, -webkit-transform ease;
 
             overflow: hidden;
 
@@ -873,9 +892,14 @@ export default {
                 position: relative;
                 width: 100%;
                 height: 100%;
+                -webkit-transition: -webkit-transform ease;
+                transition: -webkit-transform ease;
                 transition: transform ease;
+                transition: transform ease, -webkit-transform ease;
 
                 .inner-content-container {
+                    display: -webkit-box;
+                    display: -ms-flexbox;
                     display: flex;
                     height: 100%;
                     width: 100%;
@@ -897,7 +921,11 @@ export default {
     .content-dots-wrapper {
         position: relative;
         width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
         justify-content: center;
         margin-top: 20px;
         white-space: nowrap;
@@ -921,7 +949,10 @@ export default {
                 top: 5px;
                 left: 10px;
                 border-radius: 100%;
+                -webkit-transition: -webkit-transform 0.3s ease;
+                transition: -webkit-transform 0.3s ease;
                 transition: transform 0.3s ease;
+                transition: transform 0.3s ease, -webkit-transform 0.3s ease;
                 opacity: 0.8;
             }
         }
@@ -929,6 +960,8 @@ export default {
 }
 
 .ww-editing .ww-slider-tab {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 </style>
