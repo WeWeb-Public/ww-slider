@@ -264,6 +264,10 @@ export default {
         init() {
             this.autoplay();
 
+            setTimeout(() => {
+                this.refresh = !this.refresh;
+            }, 300);
+
             /* wwManager:start */
             this.refreshInterval = setInterval(() => {
                 this.refresh = !this.refresh;
@@ -347,6 +351,7 @@ export default {
 
                 clearInterval(this.slideInterval);
                 this.slideInterval = setInterval(function() {
+                    this.refresh = !this.refresh;
                     if (self.wwObjectCtrl.getSectionCtrl().getEditMode()) {
                         return;
                     }
