@@ -1,0 +1,55 @@
+{
+	"componentPath": "./src/wwObjectSlider.vue",
+	"content": {
+		"type": "ww-slider",
+		"data": {
+			"autoplay": true,
+			"activeDotColor": "#1E88E5",
+			"dotPosition": "inside",
+			"dotsBorderColor": "#1E88E5",
+			"intervalDelay": 3,
+			"navigationDots": false,
+			"animationDuration": 0.3,
+			"overlap": false,
+			"slides": [],
+			"offset": 50,
+			"style": {
+				"borderRadius": 0,
+				"borderWidth": 0,
+				"borderColor": "#000000",
+				"borderStyle": "solid",
+				"boxShadow": {
+					"x": 0,
+					"y": 0,
+					"b": 0,
+					"s": 0,
+					"c": ""
+				}
+			}
+		}
+	},
+	"upsales": {
+		"wwAnalytics": {
+			"click": true
+		}
+	},
+	"cmsOptions": {
+		"wwObjectHover": {
+			"pluses": false
+		},
+		"wwObjectMenu": {
+			"items": [
+				{
+					"name": "OPTIONS",
+					"main": true,
+					"text": {
+						"en": "Options",
+						"fr": "Options"
+					},
+					"icon": "wwi wwi-edit-other",
+					"action": "edit"
+				}
+			]
+		}
+	}
+}

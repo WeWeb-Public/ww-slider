@@ -1,28 +1,28 @@
 {
-    "name": "ww-slider",
-    "type": "wwObject",
-    "wewebPublic": "true",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/WeWeb-Public/ww-slider"
-    },
-    "version": "0.0.3",
-    "private": true,
-    "scripts": {
-        "build": "weweb-build",
-        "serve": "weweb-serve",
-        "upload": "weweb-upload"
-    },
-    "dependencies": {
-        "vue": "^2.6.10",
-        "vue-touch": "^2.0.0-beta.4"
-    },
-    "devDependencies": {
-        "weweb-client": "^1.0.47"
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not ie <= 8"
-    ]
+	"name": "ww-slider",
+	"type": "wwObject",
+	"wewebPublic": "true",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/WeWeb-Public/ww-slider"
+	},
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"build": "weweb-build",
+		"serve": "weweb-serve",
+		"create-config": "weweb-config"
+	},
+	"dependencies": {
+		"vue": "^2.6.11",
+                "vue-touch": "^2.0.0-beta.4"
+	},
+	"devDependencies": {
+		"weweb-client": "latest"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not ie <= 8"
+	]
 }
